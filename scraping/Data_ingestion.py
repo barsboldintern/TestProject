@@ -39,7 +39,7 @@ def get_ad_links(main_page_url):
 
 def get_info(link):
     #start = time.time()
-    page = requests.get(link)
+    page = get_page_content(link)
     soup = BeautifulSoup(page.text, 'html.parser')
     char_price = soup.find('meta', itemprop ='price')
     price = char_price.get('content')
@@ -113,5 +113,26 @@ def info_from_first_n(base_page_url, n):
         print("No data scraped.")
     return
 
-info_from_first_n(home_url, 100)
+## Function to get prettified data starting from page n to f
+def info_start_end(base_page_url, n, f):
+    all_rows = []
+    for i in range(n, f+ 1):
+        full_url = base_page_url + "?page=" + str(i)
+        print(full_url)
+        try:
+            sdf = info_from_single(full_url)  # Assuming you have a function called info_from_single
+            if sdf is not None:
+                all_rows.append(sdf)
+            else:
+                print("No data has returnedf for url :", full_url)
+        except Exception as e:
+            print(f"Error encountered on page {i}: {e}")
+            break  # Stop scraping if an error occurs
+    if all_rows:
+        df = pd.concat(all_rows, ignore_index=True)
+        df.to_csv('oron_suuts_nemelt.csv', index=False)
+    else:
+        print("No data scraped.")
+    return
+info_start_end(home_url, 104, 105)
 
