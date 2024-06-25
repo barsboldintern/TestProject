@@ -11,13 +11,13 @@ This project involves scraping real estate data, cleaning and preprocessing it, 
 
 This directory contains all the scripts and notebooks required for data scraping, cleaning, feature engineering, and model training.
 
+### `scraping/datas`
+
+This directory contains all the necessary datas.
+
 #### `data_ingestion.py`
 
 This script scrapes real estate advertisements from Unegui.mn and exports the data to `cleaned_data.csv`.
-
-#### `data_visualization_and_plotting.py`
-
-This script is used to visualize the data. It is not crucial for the main pipeline but provides useful insights through data visualization.
 
 #### `cleaning_module.ipynb`
 
@@ -31,21 +31,15 @@ This Jupyter notebook handles feature engineering. New features are created and 
 
 This Jupyter notebook is used for training machine learning models. It includes the steps to train and evaluate the models. **Please take a look at this.**
 
-#### `data_aos_modified.csv`
-
-This file contains the manually cleaned and modified data.
-
 ## Instructions
 
 1. **Data Ingestion**: Run the `data_ingestion.py` script to scrape data from Unegui.mn and save it to `cleaned_data.csv`.
 
-2. **Data Visualization**: Use `data_visualization_and_plotting.py` to visualize the data and gain insights.
+2. **Data Cleaning**: Open `cleaning_module.ipynb` in Jupyter Notebook and follow the steps to clean the data. Save the cleaned data to `cleaned_data_cleaned.csv`.
 
-3. **Data Cleaning**: Open `cleaning_module.ipynb` in Jupyter Notebook and follow the steps to clean the data. Save the cleaned data to `cleaned_data_cleaned.csv`.
+3. **Feature Engineering**: Open `feature_engineering_module.ipynb` in Jupyter Notebook and perform feature engineering. Save the engineered data to `cleaned_data_engineered.csv`.
 
-4. **Feature Engineering**: Open `feature_engineering_module.ipynb` in Jupyter Notebook and perform feature engineering. Save the engineered data to `cleaned_data_engineered.csv`.
-
-5. **Model Training**: Open `training_module.ipynb` in Jupyter Notebook and train the machine learning model. Evaluate the model using Mean Absolute Error and R-squared metrics.
+4. **Model Training**: Open `training_module.ipynb` in Jupyter Notebook and train the machine learning model. Evaluate the model using Mean Absolute Error and R-squared metrics.
 
 ## Notes
 
