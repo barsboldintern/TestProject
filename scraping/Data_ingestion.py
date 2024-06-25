@@ -134,5 +134,6 @@ def info_start_end(base_page_url, n, f):
     else:
         print("No data scraped.")
     return
-info_start_end(home_url, 104, 105)
+
+info_start_end(home_url, 101, 157)
 
