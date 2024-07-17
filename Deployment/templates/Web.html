@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apartment Price Predictor</title>
+    <!-- Link to Google Fonts for Cyrillic support -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Mongolian&display=swap">
+    <style>
+        body {
+            font-family: 'Noto Sans Mongolian', sans-serif;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Apartment Price Predictor</h1>
+    <form id="predictionForm">
+        <!-- Add necessary input fields -->
+        Дүүрэг: <input type="text" id="Дүүрэг" name="Дүүрэг"><br> 
+        Хаяг: <input type="text" id="Хаяг" name="Хаяг"><br>
+        Талбай: <input type="float" id="Талбай" name="Талбай"><br>
+        Хэдэн давхарт: <input type="number" id="Хэдэн_давхарт" name="Хэдэн давхарт"><br>
+        Цонхны тоо: <input type="number" id="Цонхны_тоо" name="Цонхны тоо"><br>  
+        Цонх материал: <input type="text" id="Цонх" name="Цонх"><br>
+        Хаалга материал: <input type="text" id="Хаалга" name="Хаалга"><br>
+        Шал материал: <input type="text" id="Шал" name="Шал"><br>
+        Барилгын давхар: <input type="number" id="Барилгын_давхар" name="Барилгын давхар"><br> 
+
+        <div class="form-group">
+            <label>Тагттай юу?</label>
+            <div class="radio-group">
+                <label>
+                    <input type="radio" name="тагт" value="yes" required> Тийм
+                </label>
+                <label>
+                    <input type="radio" name="тагт" value="no" required> Үгүй
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Гаражтай юу?</label>
+            <div class="radio-group">
+                <label>
+                    <input type="radio" name="гараж" value="yes" required> Тийм
+                </label>
+                <label>
+                    <input type="radio" name="гараж" value="no" required> Үгүй
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Лизингээр авах боломжтой юу?</label>
+            <div class="radio-group">
+                <label>
+                    <input type="radio" name="Лизинг" value="yes" required> Тийм
+                </label>
+                <label>
+                    <input type="radio" name="Лизинг" value="no" required> Үгүй
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Ашиглалтанд орсон эсэх?</label>
+            <div class="radio-group">
+                <label>
+                    <input type="radio" name="Ашиглалтанд" value="yes" required onclick="toggleBuiltYear(true)"> Тийм
+                </label>
+                <label>
+                    <input type="radio" name="Ашиглалтанд" value="no" required onclick="toggleBuiltYear(false)"> Үгүй
+                </label>
+            </div>
+        </div>
+        
+        <div class="form-group hidden" id="builtYearGroup">
+            <label>Хэзээ ашиглалтанд орсон?</label>
+            <input type="number" id="Ашиглалтанд_орсон_он" name="Ашиглалтанд орсон он">
+        </div>
+
+        <input type="submit" value="Predict">
+    </form>
+    <div id="result"></div>
+    <script>
+        function toggleBuiltYear(show) {
+            const builtYearGroup = document.getElementById('builtYearGroup');
+            if (show) {
+                builtYearGroup.classList.remove('hidden');
+            } else {
+                builtYearGroup.classList.add('hidden');
+            }
+        }
+
+        document.getElementById('predictionForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Calculate age based on Ашиглалтанд орсон эсэх
+            let builtYear = document.getElementById('Ашиглалтанд_орсон_он').value;
+            let age = 0;
+            if (document.querySelector('input[name="Ашиглалтанд"]:checked').value === 'yes') {
+                let currentYear = 2024;
+                age = currentYear - builtYear;
+            }
+
+            // Fetch data from server
+            fetch(`${window.origin}/predict`, {
+                
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                method: 'POST',
+                body: JSON.stringify({
+                    Дүүрэг: document.getElementById('Дүүрэг').value,
+                    Хаяг: document.getElementById('Хаяг').value,
+                    Талбай: document.getElementById('Талбай').value,
+                    Хэдэн_давхарт: document.getElementById('Хэдэн_давхарт').value,
+                    Цонхны_тоо: document.getElementById('Цонхны_тоо').value,
+                    Цонх: document.getElementById('Цонх').value,
+                    Хаалга: document.getElementById('Хаалга').value,
+                    Шал: document.getElementById('Шал').value,
+                    Барилгын_давхар: document.getElementById('Барилгын_давхар').value,
+                    тагт: document.querySelector('input[name="тагт"]:checked').value,
+                    гараж: document.querySelector('input[name="гараж"]:checked').value,
+                    Лизинг: document.querySelector('input[name="Лизинг"]:checked').value,
+                    Барилгын_явц: document.querySelector('input[name="Ашиглалтанд"]:checked').value,
+                    Нас: age
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerText = 'Predicted Price: ' + data.prediction;
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
